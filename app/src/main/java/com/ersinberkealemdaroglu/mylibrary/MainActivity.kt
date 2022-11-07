@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dataPicker() {
-        val myDataPicker = DataPicker(this)
+        val myDataPicker = DataPicker(this@MainActivity, null)
             .setFormatType("dd.MM.yyyy")
             .setListener(object : OnDataSelectedListener {
                 override fun isSelected(date: String) {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         binding.button.setOnClickListener {
-            myDataPicker.show()
+            myDataPicker.showActivity()
         }
 
 
