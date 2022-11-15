@@ -3,15 +3,18 @@ package com.ersinberkealemdaroglu.mylibrary
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.ersinberkealemdaroglu.datapicker.DataPicker
 import com.ersinberkealemdaroglu.datapicker.OnDataSelectedListener
+import com.ersinberkealemdaroglu.datapicker.ui.ChatAltBarView
 import com.ersinberkealemdaroglu.mylibrary.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private var myDate: String = ""
+    private var myString: String = ""
 
     private lateinit var binding: ActivityMainBinding
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(){
         dataPicker()
+        chatApp()
     }
 
     private fun dataPicker() {
@@ -39,8 +43,10 @@ class MainActivity : AppCompatActivity() {
         binding.button.setOnClickListener {
             myDataPicker.showActivity()
         }
+    }
 
-
+    private fun chatApp(){
+        val text = binding.ghostView.setTextMessage()
     }
 
 }
