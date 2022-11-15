@@ -8,4 +8,5 @@ object Constants {
     const val OPEN_GOOGLE = "Opening Google..."
     const val OPEN_SEARCH = "Searching..."
     const val OPEN_PAKET = "Sizi paketlerim sayfasına yönlendiriyorum."
+    const val OPEN_FATURA = "Sizi faturalarım sayfasına yönlendiriyorum."
 }

@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ersinberkealemdaroglu.datapicker.R
@@ -29,8 +30,7 @@ class ChatAltBarView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle) {
 
-    //private lateinit var binding: ChatAltBarBinding
-    private lateinit var adapter: MessageAdapter
+    private var adapter: MessageAdapter
     var messagesList = mutableListOf<MessageData>()
 
     init {
@@ -57,7 +57,7 @@ class ChatAltBarView @JvmOverloads constructor(
                 adapter.insertMessage(MessageData(message.text.toString(), SEND_ID, timeStamp))
                 recyclerView.scrollToPosition(adapter.itemCount - 1)
 
-                botResponse(message.text.toString())
+                ChatBotResponse().botResponse(message.text.toString())
             }
 
 
@@ -68,45 +68,5 @@ class ChatAltBarView @JvmOverloads constructor(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun botResponse(message: String) {
-        val timeStamp = TimeObject.timeStamp()
 
-        GlobalScope.launch {
-            //Fake response delay
-            delay(1000)
-
-            withContext(Dispatchers.Main) {
-                //Gets the response
-                val response = BotResponse.basicResponses(message)
-
-                //Adds it to our local list
-                messagesList.add(MessageData(response, RECEIVE_ID, timeStamp))
-
-                //Inserts our message into the adapter
-                adapter.insertMessage(MessageData(response, RECEIVE_ID, timeStamp))
-
-                //Scrolls us to the position of the latest message
-                findViewById<RecyclerView>(R.id.recyclerview).scrollToPosition(adapter.itemCount - 1)
-
-                //Starts Google
-                when (response) {
-                    OPEN_GOOGLE -> {
-                        val site = Intent(Intent.ACTION_VIEW)
-                        site.data = Uri.parse("https://www.google.com/")
-                    }
-                    OPEN_SEARCH -> {
-                        val site = Intent(Intent.ACTION_VIEW)
-                        val searchTerm: String? = message.substringAfterLast("search")
-                        site.data = Uri.parse("https://www.google.com/search?&q=$searchTerm")
-                    }
-                    OPEN_PAKET -> {
-                        val site = Intent(Intent.ACTION_VIEW)
-                        site.data = Uri.parse("https://www.turkcell.com.tr/paket-ve-tarifeler")
-                    }
-
-                }
-            }
-        }
-    }
 }
