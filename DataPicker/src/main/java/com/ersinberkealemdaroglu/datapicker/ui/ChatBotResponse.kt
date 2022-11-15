@@ -54,12 +54,8 @@ class ChatBotResponse : AppCompatActivity() {
                     Constants.OPEN_PAKET -> {
                         val site = Intent(Intent.ACTION_VIEW)
                         site.data = Uri.parse("https://www.turkcell.com.tr/paket-ve-tarifeler")
-                        ContextCompat.startActivity(this@ChatBotResponse, site, null)
+                        //startActivity(site)
                     }
-                    Constants.OPEN_FATURA ->{
-                        //yapılacak.
-                    }
-
                 }
             }
         }

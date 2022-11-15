@@ -57,7 +57,7 @@ class ChatAltBarView @JvmOverloads constructor(
                 adapter.insertMessage(MessageData(message.text.toString(), SEND_ID, timeStamp))
                 recyclerView.scrollToPosition(adapter.itemCount - 1)
 
-                ChatBotResponse().botResponse(message.text.toString())
+                botResponse(message.text.toString())
             }
 
 
@@ -68,5 +68,48 @@ class ChatAltBarView @JvmOverloads constructor(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun botResponse(message: String) {
+        val timeStamp = TimeObject.timeStamp()
 
+        GlobalScope.launch {
+            //Fake response delay
+            delay(1000)
+
+            withContext(Dispatchers.Main) {
+                //Gets the response
+                val response = BotResponse.basicResponses(message)
+
+                //Adds it to our local list
+                messagesList.add(MessageData(response, RECEIVE_ID, timeStamp))
+
+                //Inserts our message into the adapter
+                adapter.insertMessage(MessageData(response, RECEIVE_ID, timeStamp))
+
+                //Scrolls us to the position of the latest message
+                findViewById<RecyclerView>(R.id.recyclerview).scrollToPosition(adapter.itemCount - 1)
+
+                //Starts Google
+                when (response) {
+                    OPEN_GOOGLE -> {
+                        val site = Intent(Intent.ACTION_VIEW)
+                        site.data = Uri.parse("https://www.google.com/")
+                        startActivity(context, site, null)
+                    }
+                    OPEN_SEARCH -> {
+                        val site = Intent(Intent.ACTION_VIEW)
+                        val searchTerm: String = message.substringAfterLast("search")
+                        site.data = Uri.parse("https://www.google.com/search?&q=$searchTerm")
+                        startActivity(context, site, null)
+                    }
+                    OPEN_PAKET -> {
+                        val site = Intent(Intent.ACTION_VIEW)
+                        site.data = Uri.parse("https://www.turkcell.com.tr/paket-ve-tarifeler")
+                        startActivity(context, site, null)
+                    }
+
+                }
+            }
+        }
+    }
 }
